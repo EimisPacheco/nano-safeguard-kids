@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeGuard Kids - Page Blur Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header {
+      background: rgba(0, 0, 0, 0.15);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .header h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .header p {
+      opacity: 0.95;
+      font-size: 16px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .content {
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: calc(100vh - 160px);
+    }
+
+    .info-box {
+      background: white;
+      border-left: 5px solid #667eea;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .info-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .info-box h3 {
+      color: #667eea;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .info-box p {
+      color: #374151;
+      line-height: 1.7;
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+
+    .info-box ul {
+      margin-left: 20px;
+      color: #374151;
+    }
+
+    .info-box li {
+      margin: 8px 0;
+      line-height: 1.6;
+    }
+
+    .info-box strong {
+      color: #1f2937;
+    }
+
+    .explanation-box {
+      background: white;
+      border-left: 5px solid #3b82f6;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .explanation-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .explanation-box h3 {
+      color: #3b82f6;
+      margin-bottom: 16px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .explanation-box p {
+      color: #374151;
+      line-height: 1.7;
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+
+    .explanation-box code {
+      background: #f3f4f6;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+      font-size: 13px;
+      color: #1f2937;
+      font-weight: 500;
+    }
+
+    .explanation-box strong {
+      color: #1f2937;
+    }
+
+    .test-section {
+      background: white;
+      border-left: 5px solid #8b5cf6;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .test-section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .test-section h3 {
+      color: #1f2937;
+      margin-bottom: 16px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .test-section p {
+      color: #374151;
+      line-height: 1.7;
+      margin-bottom: 15px;
+      font-size: 15px;
+    }
+
+    .test-section ul {
+      margin-left: 20px;
+      color: #374151;
+    }
+
+    .test-section li {
+      margin: 8px 0;
+      line-height: 1.6;
+    }
+
+    .test-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 16px;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .test-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .test-button:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .content {
+        padding: 30px 15px;
+      }
+
+      .info-box, .explanation-box, .test-section {
+        padding: 18px;
+      }
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .test-image {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      border: 2px solid #d1d5db;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .test-image:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .warning-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(220, 38, 38, 0.95);
+      backdrop-filter: blur(20px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .warning-overlay.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .warning-content {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .warning-content h2 {
+      color: #dc2626;
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .warning-content p {
+      color: #374151;
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    .status-box {
+      background: #d1fae5;
+      border: 2px solid #6ee7b7;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .status-box.show {
+      display: block;
+    }
+
+    .status-box h4 {
+      color: #065f46;
+      margin-bottom: 10px;
+    }
+
+    .status-box p {
+      color: #047857;
+      line-height: 1.6;
+    }
+
+    .blur-effect {
+      filter: blur(40px);
+      pointer-events: none;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🔞 Content Protection Test</h1>
+    <p>Test SafeGuard Kids automatic content blur and blocking features</p>
+  </div>
+
+  <div class="content" id="mainContent">
+      <div class="info-box">
+        <h3>⚠️ What This Tests</h3>
+        <p>This page demonstrates how SafeGuard Kids automatically blurs inappropriate content to protect children. When the extension detects adult/inappropriate content, it:</p>
+        <ul>
+          <li><strong>Instantly blurs the entire page</strong> - Making content unreadable when visiting inappropriate websites</li>
+          <li><strong>Blurs inappropriate images in chats</strong> - When images are sent/received in the Chat Simulator, inappropriate content is automatically detected and blurred before being displayed</li>
+          <li><strong>Shows a warning overlay</strong> - Explaining why the page was blocked</li>
+          <li><strong>Offers options</strong> - Child can leave or request parent help</li>
+          <li><strong>Logs the incident</strong> - Parent sees this in the dashboard</li>
+        </ul>
+      </div>
+
+      <div class="explanation-box">
+        <h3>📖 How It Works</h3>
+        <p><strong>Step 1:</strong> The <code>page-monitor.js</code> content script checks the page URL and meta tags when a page loads.</p>
+        <p><strong>Step 2:</strong> If keywords like "porn", "xxx", "adult", "nsfw" are detected in the URL or page title, it triggers the blur.</p>
+        <p><strong>Step 3:</strong> The extension applies <code>filter: blur(40px)</code> to the entire page body, making it impossible to see.</p>
+        <p><strong>Step 4:</strong> A warning overlay appears with options to leave the page or contact a parent.</p>
+        <p><strong>Step 5:</strong> The incident is logged and the parent is notified in Active or Both modes.</p>
+      </div>
+
+      <div class="test-section">
+        <h3>🧪 Test 1: Trigger Page Blur</h3>
+        <p>Click the button below to simulate what happens when a child visits an inappropriate website. The entire page will be blurred and a warning will appear.</p>
+        <button class="test-button" id="triggerBtn">
+          🔞 Simulate Inappropriate Page Detection
+        </button>
+        <div class="status-box" id="status1">
+          <h4>✅ Test Complete</h4>
+          <p>The page should now be blurred and a warning overlay should appear. This is what children see when they accidentally (or intentionally) visit inappropriate sites.</p>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>📊 What Gets Detected</h3>
+        <p>SafeGuard Kids monitors for these patterns in URLs and page content:</p>
+        <ul style="margin-left: 20px; color: #6b7280;">
+          <li><code>pornhub.com</code>, <code>xvideos.com</code>, <code>xnxx.com</code> - Known adult sites</li>
+          <li>URL keywords: <code>porn</code>, <code>xxx</code>, <code>adult</code>, <code>sex</code>, <code>nsfw</code></li>
+          <li>Page title keywords: Similar patterns in the title tag</li>
+          <li>Meta description: Checks for adult content indicators</li>
+        </ul>
+      </div>
+
+      <div class="test-section">
+        <h3>💬 Chat Image Protection</h3>
+        <p><strong>In Chat Conversations:</strong> When using the Chat Simulator, inappropriate images are automatically detected and blurred:</p>
+        <ul>
+          <li><strong>Real-time detection</strong> - Images analyzed before being displayed</li>
+          <li><strong>Automatic blur</strong> - Inappropriate images shown with heavy blur effect</li>
+          <li><strong>Threat scoring</strong> - Each image gets a threat level (0-10)</li>
+          <li><strong>Parent notification</strong> - Critical threats trigger immediate alerts</li>
+        </ul>
+        <p style="margin-top: 16px;"><em>Try uploading images in the Chat Simulator to test this feature!</em></p>
+      </div>
+
+      <div class="test-section">
+        <h3>🎯 Real-World Scenarios</h3>
+        <p><strong>Scenario 1 - Inappropriate Websites:</strong></p>
+        <ul>
+          <li>Without SafeGuard: Child sees harmful content immediately</li>
+          <li>With SafeGuard: Page blurred instantly, warning shown, parent notified</li>
+        </ul>
+        <p style="margin-top: 16px;"><strong>Scenario 2 - Chat Images:</strong></p>
+        <ul>
+          <li>Without SafeGuard: Child receives and views inappropriate images</li>
+          <li>With SafeGuard: Images analyzed, blurred if inappropriate, threat logged</li>
+        </ul>
+      </div>
+
+      <div class="image-grid">
+        <div class="test-image" title="Page Blocking">🚫</div>
+        <div class="test-image" title="Content Filtering">🔞</div>
+        <div class="test-image" title="Warning System">⚠️</div>
+        <div class="test-image" title="Protected">🛡️</div>
+      </div>
+    </div>
+
+  <!-- Warning Overlay (hidden by default) -->
+  <div class="warning-overlay" id="warningOverlay">
+    <div class="warning-content">
+      <h2>🚫 Page Blocked</h2>
+      <p>This page contains content that may not be appropriate. SafeGuard Kids has automatically blocked this page to protect you.</p>
+      <p><strong>What happened:</strong> Our AI detected that this page might have inappropriate content, so we blurred it and showed you this warning instead.</p>
+      <div class="button-group">
+        <button class="btn btn-primary" id="leaveBtn">
+          ← Leave This Page
+        </button>
+        <button class="btn btn-secondary" id="helpBtn">
+          🆘 Get Parent Help
+        </button>
+      </div>
+      <p style="margin-top: 20px; font-size: 14px; color: #6b7280;">
+        This incident has been logged and your parent will be notified.
+      </p>
+    </div>
+  </div>
+
+  <script src="test-porn-detection.js"></script>
+</body>
+</html>

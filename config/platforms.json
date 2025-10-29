@@ -1,0 +1,192 @@
+{
+  "platforms": {
+    "facebook": {
+      "name": "Facebook",
+      "domain": "facebook.com",
+      "selectors": {
+        "messageInput": [
+          "div[contenteditable='true'][role='textbox']",
+          "div[aria-label='Message']",
+          "div[data-lexical-editor='true']"
+        ],
+        "messageContainer": [
+          "div[role='main'][aria-label*='Conversation']",
+          "div[role='main'][aria-label*='Messages']"
+        ],
+        "sentMessage": [
+          "div.xyk4ms5[dir='auto']"
+        ],
+        "receivedMessage": [
+          "div.x18lvrbx[dir='auto']"
+        ],
+        "images": [
+          "div[role='main'] img.xz74otr",
+          "div[role='main'] img.x193iq5w",
+          "div[role='main'] div[role='presentation'] img:not([class*='x1rg5ohu']):not([class*='x5yr21d']):not([style*='border-radius: 50%'])",
+          "div[data-scope='messages_table'] div[role='gridcell'] img:not([class*='x1rg5ohu']):not([style*='border-radius: 50%'])"
+        ]
+      }
+    },
+    "messenger": {
+      "name": "Messenger",
+      "domain": "messenger.com",
+      "selectors": {
+        "messageInput": [
+          "div[contenteditable='true'][role='textbox']",
+          "div[aria-label='Message']"
+        ],
+        "messageContainer": [
+          "div[role='main']"
+        ],
+        "sentMessage": [
+          "div[data-scope='messages_table'] div[dir='auto']"
+        ],
+        "receivedMessage": [
+          "div[data-scope='messages_table'] div[dir='auto']"
+        ],
+        "images": [
+          "img[src*='scontent']"
+        ]
+      }
+    },
+    "instagram": {
+      "name": "Instagram",
+      "domain": "instagram.com",
+      "selectors": {
+        "messageInput": [
+          "div[contenteditable='true'][aria-label*='Message']",
+          "textarea[placeholder='Message...']"
+        ],
+        "messageContainer": [
+          "div[role='grid']",
+          "div[class*='x9f619']"
+        ],
+        "sentMessage": [
+          "div[class*='x1n2onr6']"
+        ],
+        "receivedMessage": [
+          "div[class*='x1n2onr6']"
+        ],
+        "images": [
+          "img[class*='x5yr21d']",
+          "div[role='button'] img"
+        ]
+      }
+    },
+    "whatsapp": {
+      "name": "WhatsApp",
+      "domain": "web.whatsapp.com",
+      "selectors": {
+        "messageInput": [
+          "div[contenteditable='true'][data-tab='10']",
+          "div[role='textbox']"
+        ],
+        "messageContainer": [
+          "div[data-testid='conversation-panel-messages']"
+        ],
+        "sentMessage": [
+          "div[data-testid='msg-container']",
+          "span.selectable-text"
+        ],
+        "receivedMessage": [
+          "div[data-testid='msg-container']",
+          "span.selectable-text"
+        ],
+        "images": [
+          "img[src*='blob']",
+          "img[class*='_1JVSX']"
+        ]
+      }
+    },
+    "discord": {
+      "name": "Discord",
+      "domain": "discord.com",
+      "selectors": {
+        "messageInput": [
+          "div[role='textbox'][aria-label*='Message']"
+        ],
+        "messageContainer": [
+          "div[class*='chatContent']",
+          "ol[data-list-id='chat-messages']"
+        ],
+        "sentMessage": [
+          "li[id*='chat-messages'] div[class*='messageContent']"
+        ],
+        "receivedMessage": [
+          "li[id*='chat-messages'] div[class*='messageContent']"
+        ],
+        "images": [
+          "img[class*='originalLink']",
+          "div[class*='imageWrapper'] img"
+        ]
+      }
+    },
+    "snapchat": {
+      "name": "Snapchat",
+      "domain": "web.snapchat.com",
+      "selectors": {
+        "messageInput": [
+          "div[contenteditable='true']",
+          "textarea"
+        ],
+        "messageContainer": [
+          "div[class*='messages']"
+        ],
+        "sentMessage": [
+          "div[class*='message']"
+        ],
+        "receivedMessage": [
+          "div[class*='message']"
+        ],
+        "images": [
+          "img"
+        ]
+      }
+    },
+    "twitter": {
+      "name": "Twitter/X",
+      "domain": ["twitter.com", "x.com"],
+      "selectors": {
+        "messageInput": [
+          "div[data-testid='dmComposerTextInput']",
+          "div[contenteditable='true'][role='textbox']"
+        ],
+        "messageContainer": [
+          "div[data-testid='DMDrawer']",
+          "section[role='region']"
+        ],
+        "sentMessage": [
+          "div[data-testid='messageEntry']"
+        ],
+        "receivedMessage": [
+          "div[data-testid='messageEntry']"
+        ],
+        "images": [
+          "div[data-testid='messageEntry'] img"
+        ]
+      }
+    },
+    "tiktok": {
+      "name": "TikTok",
+      "domain": "tiktok.com",
+      "selectors": {
+        "messageInput": [
+          "div[contenteditable='true']",
+          "textarea"
+        ],
+        "messageContainer": [
+          "div[class*='chat-container']"
+        ],
+        "sentMessage": [
+          "div[class*='message']"
+        ],
+        "receivedMessage": [
+          "div[class*='message']"
+        ],
+        "images": [
+          "img[class*='image']"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "safeguard-kids",
+  "version": "1.0.0",
+  "description": "AI-powered Chrome extension to protect children from online predators using Chrome's built-in AI and TensorFlow.js",
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/safeguard-kids"
+  },
+  "keywords": [
+    "chrome-extension",
+    "child-safety",
+    "parental-control",
+    "ai",
+    "gemini-nano",
+    "tensorflow",
+    "online-safety"
+  ],
+  "scripts": {
+    "test": "echo \"No tests yet\"",
+    "build": "npm run build:service-worker && npm run build:monitor",
+    "build:service-worker": "parcel build src/service-worker.js --dist-dir background --no-source-maps",
+    "build:monitor": "parcel build src/monitor.js --dist-dir content --no-source-maps",
+    "dev": "parcel watch src/service-worker.js --dist-dir background --no-source-maps",
+    "clean": "rm -rf background/service-worker.js background/service-worker.js.map content/monitor.js .parcel-cache"
+  },
+  "dependencies": {
+    "@tensorflow-models/toxicity": "^1.2.2",
+    "@tensorflow/tfjs": "^4.22.0",
+    "@vonage/server-sdk": "^3.25.1"
+  },
+  "devDependencies": {
+    "@parcel/config-default": "^2.16.0",
+    "buffer": "^6.0.3",
+    "parcel": "^2.16.0",
+    "process": "^0.11.10"
+  }
+}

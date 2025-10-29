@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeGuard Kids - Test Interface</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header {
+      background: rgba(0, 0, 0, 0.15);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .header h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .header p {
+      opacity: 0.95;
+      font-size: 16px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .chat-container {
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: calc(100vh - 160px);
+    }
+
+    .test-section {
+      margin-bottom: 24px;
+      padding: 24px;
+      background: white;
+      border-radius: 16px;
+      border-left: 5px solid #667eea;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .test-section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .test-section h3 {
+      color: #1f2937;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .test-section p {
+      color: #6b7280;
+      font-size: 14px;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .test-message {
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #374151;
+      transition: all 0.3s ease;
+    }
+
+    .test-message:hover {
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+    }
+
+    .test-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .test-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .test-button:active {
+      transform: translateY(0);
+    }
+
+    .danger {
+      border-left-color: #ef4444;
+    }
+
+    .warning {
+      border-left-color: #f59e0b;
+    }
+
+    .safe {
+      border-left-color: #10b981;
+    }
+
+    .result {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result.danger {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    .result.warning {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fcd34d;
+    }
+
+    .result.safe {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #6ee7b7;
+    }
+
+    .info-box {
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 32px;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.98);
+      line-height: 1.7;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-box strong {
+      display: block;
+      margin-bottom: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .chat-container {
+        padding: 30px 15px;
+      }
+
+      .test-section {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🧪 Test Interface</h1>
+    <p>Test SafeGuard Kids threat detection with predefined messages</p>
+  </div>
+
+  <div class="chat-container">
+      <div class="info-box">
+        <strong>📝 How to Use:</strong>
+        Click any "Test This Message" button below to simulate sending/receiving that message. The extension will analyze it in real-time and show you the threat level. Check your browser console (F12) for detailed AI analysis logs.
+      </div>
+
+      <!-- Test 1: Critical Grooming -->
+      <div class="test-section danger">
+        <h3>🚨 Test 1: Critical Grooming Attempt</h3>
+        <p><strong>Threat Level:</strong> CRITICAL (9-10/10) | <strong>Type:</strong> Grooming with meeting request</p>
+        <div class="test-message">
+          "You're so special and mature for your age, not like other kids. I really understand you. This is our secret, okay? Don't tell your parents about our chats, they just won't understand our connection. Want to meet up this weekend? I'll pick you up."
+        </div>
+        <button class="test-button" id="btn-grooming-critical">
+          Test This Message (Received)
+        </button>
+        <div class="result" id="result-grooming-critical"></div>
+      </div>
+
+      <!-- Test 2: Personal Information Request -->
+      <div class="test-section danger">
+        <h3>⚠️ Test 2: Personal Information Request</h3>
+        <p><strong>Threat Level:</strong> HIGH (7-8/10) | <strong>Type:</strong> PII request</p>
+        <div class="test-message">
+          "Hey, what school do you go to? What's your address? I want to send you something cool. Also, can I get your phone number so we can text?"
+        </div>
+        <button class="test-button" id="btn-pii-request">
+          Test This Message (Received)
+        </button>
+        <div class="result" id="result-pii-request"></div>
+      </div>
+
+      <!-- Test 3: Child Sharing PII -->
+      <div class="test-section danger">
+        <h3>🆘 Test 3: Child Sharing Personal Info</h3>
+        <p><strong>Threat Level:</strong> CRITICAL (9-10/10) | <strong>Type:</strong> Child exposing PII</p>
+        <div class="test-message">
+          "I'm 12 years old and I go to Lincoln Middle School. My address is 123 Oak Street, and my mom won't be home until 6pm. My phone number is 555-1234."
+        </div>
+        <button class="test-button" id="btn-pii-sharing">
+          Test This Message (Sent by Child)
+        </button>
+        <div class="result" id="result-pii-sharing"></div>
+      </div>
+
+      <!-- Test 4: Manipulation Tactics -->
+      <div class="test-section warning">
+        <h3>⚠️ Test 4: Emotional Manipulation</h3>
+        <p><strong>Threat Level:</strong> MEDIUM-HIGH (6-8/10) | <strong>Type:</strong> Guilt + pressure</p>
+        <div class="test-message">
+          "I thought you cared about me... I'm so disappointed. Come on, everyone sends pictures to their friends. Don't be scared, it's totally normal. You're being silly."
+        </div>
+        <button class="test-button" id="btn-manipulation">
+          Test This Message (Received)
+        </button>
+        <div class="result" id="result-manipulation"></div>
+      </div>
+
+      <!-- Test 5: Sexual Content -->
+      <div class="test-section danger">
+        <h3>🔞 Test 5: Sexual Content/Solicitation</h3>
+        <p><strong>Threat Level:</strong> CRITICAL (10/10) | <strong>Type:</strong> Sexual exploitation</p>
+        <div class="test-message">
+          "You're so hot and sexy. Send me some pics of you without your shirt. I'll send you some back. It'll be our little secret 😉"
+        </div>
+        <button class="test-button" id="btn-sexual-content">
+          Test This Message (Received)
+        </button>
+        <div class="result" id="result-sexual-content"></div>
+      </div>
+
+      <!-- Test 6: Safe Message -->
+      <div class="test-section safe">
+        <h3>✅ Test 6: Safe Conversation</h3>
+        <p><strong>Threat Level:</strong> SAFE (0/10) | <strong>Type:</strong> Normal friendly chat</p>
+        <div class="test-message">
+          "Hey! How was your day? Want to play some video games later? My parents said it's cool if you want to come over after school tomorrow."
+        </div>
+        <button class="test-button" id="btn-safe-message">
+          Test This Message (Received)
+        </button>
+        <div class="result" id="result-safe-message"></div>
+      </div>
+
+      <!-- Test 7: Secrecy Demand -->
+      <div class="test-section danger">
+        <h3>🤫 Test 7: Secrecy & Isolation Tactics</h3>
+        <p><strong>Threat Level:</strong> HIGH (8/10) | <strong>Type:</strong> Isolation grooming stage</p>
+        <div class="test-message">
+          "This is just between us, okay? Our special friendship. Your parents wouldn't understand - they're too old. Don't tell anyone about our conversations. Trust me, I'm the only one who really gets you."
+        </div>
+        <button class="test-button" id="btn-secrecy">
+          Test This Message (Received)
+        </button>
+        <div class="result" id="result-secrecy"></div>
+      </div>
+    </div>
+
+  <script src="demo-chat.js"></script>
+</body>
+</html>

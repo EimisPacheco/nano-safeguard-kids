@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeGuard Kids - Chat Simulator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #e5e5e5;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .chat-container {
+      width: 100%;
+      height: 100vh;
+      background: white;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #e4e6eb;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .chat-info h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #050505;
+    }
+
+    .chat-info p {
+      font-size: 12px;
+      color: #65676b;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message-wrapper {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .message-wrapper.sent {
+      align-items: flex-end;
+      margin-left: 60px;
+    }
+
+    .message-wrapper.received {
+      align-items: flex-start;
+      margin-right: 60px;
+    }
+
+    .message-bubble {
+      max-width: 100%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 15px;
+      line-height: 1.4;
+      word-wrap: break-word;
+      position: relative;
+    }
+
+    .message-wrapper.sent .message-bubble {
+      background: #667eea;
+      color: white;
+      border-radius: 18px 18px 4px 18px;
+    }
+
+    .message-wrapper.received .message-bubble {
+      background: #e4e6eb;
+      color: #050505;
+      border-radius: 18px 18px 18px 4px;
+      border: 3px solid #dc2626;
+    }
+
+    .message-image {
+      max-width: 100%;
+      width: 100%;
+      border-radius: 12px;
+      cursor: pointer;
+      display: block;
+    }
+
+    .image-wrapper {
+      position: relative;
+      max-width: 400px;
+      border: 3px solid #dc2626;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .image-wrapper.blurred .message-image {
+      filter: blur(20px);
+      pointer-events: none;
+    }
+
+    .image-warning-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(220, 38, 38, 0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .image-wrapper.blurred .image-warning-overlay {
+      display: flex;
+    }
+
+    .image-warning-overlay h4 {
+      color: white;
+      font-size: 18px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .image-warning-overlay p {
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 13px;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .image-warning-overlay button {
+      background: white;
+      color: #dc2626;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    .image-warning-overlay button:hover {
+      background: #f5f5f5;
+    }
+
+    .timestamp {
+      font-size: 11px;
+      color: #65676b;
+      margin-top: 6px;
+      padding: 0 4px;
+    }
+
+    .message-time {
+      font-size: 11px;
+      color: #8e8e93;
+      margin-top: 2px;
+      text-align: left;
+    }
+
+    .message-wrapper.sent .message-time {
+      text-align: right;
+    }
+
+    .threat-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #fbbf24;
+      color: #1f2937;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      margin-top: 4px;
+    }
+
+    .message-wrapper.sent .threat-indicator {
+      align-self: flex-end;
+    }
+
+    .message-wrapper.received .threat-indicator {
+      align-self: flex-start;
+    }
+
+    .threat-0 {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .threat-low {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .threat-medium {
+      background: #fed7aa;
+      color: #9a3412;
+    }
+
+    .threat-high {
+      background: #fecaca;
+      color: #991b1b;
+    }
+
+    .threat-critical {
+      background: #fca5a5;
+      color: #7f1d1d;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .chat-input {
+      border-top: 1px solid #e4e6eb;
+      padding: 16px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: white;
+    }
+
+    .input-wrapper {
+      flex: 1;
+      background: #f7f7f7;
+      border-radius: 24px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #e0e0e0;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 15px;
+      outline: none;
+      color: #050505;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    input[type="text"]::placeholder {
+      color: #8e8e93;
+    }
+
+    .btn-add-image {
+      background: #f0f0f0;
+      border: none;
+      border-radius: 24px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 15px;
+      font-weight: 500;
+      color: #050505;
+    }
+
+    .btn-add-image:hover {
+      background: #e0e0e0;
+    }
+
+    .btn-add-image:active {
+      transform: scale(0.98);
+    }
+
+    .btn-send {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 24px;
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-send:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-send:active {
+      transform: translateY(0);
+    }
+
+    .btn-send:disabled {
+      background: #bcc0c4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .status-bar {
+      padding: 8px 20px;
+      background: #e7f3ff;
+      border-top: 1px solid #c3ddfd;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .typing-indicator {
+      display: none;
+      padding: 8px 12px;
+      background: #f0f0f0;
+      border-radius: 18px;
+      width: fit-content;
+    }
+
+    .typing-indicator.active {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #65676b;
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <!-- Chat Header -->
+    <div class="chat-header">
+      <div class="avatar">T</div>
+      <div class="chat-info">
+        <h3>Test Contact</h3>
+        <p>Active now</p>
+      </div>
+    </div>
+
+    <!-- Chat Messages -->
+    <div class="chat-messages" id="chatMessages">
+      <div class="message-wrapper received">
+        <div class="message-bubble">Hey! How are you?</div>
+        <div class="timestamp">09:15 AM</div>
+      </div>
+    </div>
+
+    <!-- Typing Indicator -->
+    <div class="typing-indicator" id="typingIndicator">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+
+    <!-- Chat Input -->
+    <div class="chat-input">
+      <input type="file" id="imageInput" accept="image/*" style="display: none;">
+      <button class="btn-add-image" id="imageBtn">
+        <span>📷</span>
+        <span>Add Image</span>
+      </button>
+      <div class="input-wrapper">
+        <input type="text" id="messageInput" placeholder="Type a message to test text analysis...">
+      </div>
+      <button class="btn-send" id="sendBtn">
+        <span>🖼️</span>
+        <span>Send</span>
+      </button>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <div class="status-indicator"></div>
+      <span><strong>SafeGuard Monitoring Active</strong></span>
+    </div>
+  </div>
+
+  <!-- Warning Modal -->
+  <div id="warningModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;">
+    <div style="background: white; border-radius: 16px; padding: 32px; max-width: 500px; margin: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div id="warningIcon" style="font-size: 64px; margin-bottom: 16px;">⚠️</div>
+        <h2 id="warningTitle" style="margin: 0 0 12px 0; color: #d32f2f; font-size: 24px;">Safety Warning</h2>
+        <p id="warningMessage" style="color: #666; font-size: 16px; line-height: 1.5; margin: 0;"></p>
+      </div>
+      <div id="warningDetails" style="background: #f5f5f5; border-radius: 8px; padding: 16px; margin: 20px 0; font-size: 14px; line-height: 1.6;">
+      </div>
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button id="warningTalkBtn" style="flex: 1; padding: 14px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+          Talk to Parent
+        </button>
+        <button id="warningOkBtn" style="flex: 1; padding: 14px; background: #e0e0e0; color: #333; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+          I Understand
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="chat-simulator.js"></script>
+</body>
+</html>

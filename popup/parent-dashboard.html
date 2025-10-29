@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeGuard Kids - Parent Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen">
+      <div class="header">
+        <h1>🛡️ SafeGuard Kids</h1>
+        <p class="subtitle">AI-Powered Parental Control</p>
+      </div>
+
+      <div class="login-form">
+        <h2>Parent Access</h2>
+        <p class="form-description">
+          Enter your password to access the dashboard
+        </p>
+
+        <div class="form-group">
+          <label for="parent-password">Password</label>
+          <input
+            type="password"
+            id="parent-password"
+            placeholder="Enter parent password"
+            autocomplete="current-password"
+          />
+        </div>
+
+        <button id="login-btn" class="btn btn-primary">Access Dashboard</button>
+
+        <div class="first-time-setup" id="first-time-setup" style="display: none;">
+          <h3>First Time Setup</h3>
+          <p>Create a parent password to protect this dashboard</p>
+
+          <div class="form-group">
+            <label for="setup-password">Create Password</label>
+            <input
+              type="password"
+              id="setup-password"
+              placeholder="Create a strong password"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="setup-email">Parent Email (for alerts)</label>
+            <input
+              type="email"
+              id="setup-email"
+              placeholder="your.email@example.com"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="setup-mode">Monitoring Mode</label>
+            <select id="setup-mode">
+              <option value="active">Active (Child sees warnings)</option>
+              <option value="passive">Passive (Silent monitoring)</option>
+              <option value="both">Both (Warnings + Parent alerts)</option>
+            </select>
+            <p class="mode-description" style="font-size: 12px; color: #666; margin-top: 4px;">
+              <strong>Active:</strong> Shows warnings to child<br>
+              <strong>Passive:</strong> Silently alerts parent only<br>
+              <strong>Both:</strong> Warns child AND notifies parent
+            </p>
+          </div>
+
+          <button id="setup-btn" class="btn btn-primary">Complete Setup</button>
+        </div>
+
+        <p class="error-message" id="login-error" style="display: none;"></p>
+      </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboard-screen" class="screen" style="display: none;">
+      <div class="dashboard-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+          <div class="sidebar-header">
+            <h1>🛡️ SafeGuard</h1>
+            <p class="sidebar-subtitle">Kids Protection</p>
+          </div>
+
+          <!-- Stats Overview -->
+          <div class="sidebar-stats">
+            <div class="stat-item">
+              <div class="stat-icon">📊</div>
+              <div class="stat-info">
+                <div class="stat-value" id="total-analyzed">0</div>
+                <div class="stat-label">Messages</div>
+              </div>
+            </div>
+
+            <div class="stat-item alert">
+              <div class="stat-icon">⚠️</div>
+              <div class="stat-info">
+                <div class="stat-value" id="threats-detected">0</div>
+                <div class="stat-label">Threats</div>
+              </div>
+            </div>
+
+            <div class="stat-item critical">
+              <div class="stat-icon">🚨</div>
+              <div class="stat-info">
+                <div class="stat-value" id="critical-threats">0</div>
+                <div class="stat-label">Critical</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <nav class="sidebar-nav">
+            <button class="nav-item active" data-tab="alerts">
+              <span class="nav-icon">🔔</span>
+              <span class="nav-text">Alerts</span>
+            </button>
+            <button class="nav-item" data-tab="settings">
+              <span class="nav-icon">⚙️</span>
+              <span class="nav-text">Settings</span>
+            </button>
+            <button class="nav-item" data-tab="about">
+              <span class="nav-icon">ℹ️</span>
+              <span class="nav-text">About</span>
+            </button>
+
+            <!-- Test Buttons -->
+            <div style="padding: 12px 8px; margin-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+              <button class="nav-item test-btn" id="open-test-chat" style="background: rgba(255, 193, 7, 0.2); border: 1px solid rgba(255, 193, 7, 0.4); margin-bottom: 8px;">
+                <span class="nav-icon">🧪</span>
+                <span class="nav-text">Test Messages</span>
+              </button>
+              <button class="nav-item test-btn" id="open-chat-simulator" style="background: rgba(102, 126, 234, 0.2); border: 1px solid rgba(102, 126, 234, 0.4); margin-bottom: 8px;">
+                <span class="nav-icon">💬</span>
+                <span class="nav-text">Chat Simulator</span>
+              </button>
+              <button class="nav-item test-btn" id="open-test-porn" style="background: rgba(220, 38, 38, 0.2); border: 1px solid rgba(220, 38, 38, 0.4);">
+                <span class="nav-icon">🔞</span>
+                <span class="nav-text">Test Porn Detection</span>
+              </button>
+            </div>
+          </nav>
+
+          <div class="sidebar-footer">
+            <button id="logout-btn" class="btn btn-logout">
+              <span>🚪</span> Logout
+            </button>
+          </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+
+      <!-- Alerts Tab -->
+      <div id="alerts-tab" class="tab-content active">
+        <div class="section">
+          <h2>Recent Alerts</h2>
+
+          <div class="filter-bar">
+            <select id="threat-filter">
+              <option value="all">All Threats</option>
+              <option value="critical">Critical Only</option>
+              <option value="high">High Priority</option>
+              <option value="medium">Medium Priority</option>
+            </select>
+          </div>
+
+          <div id="threats-list" class="threats-list">
+            <!-- Threats will be populated by JavaScript -->
+            <div class="empty-state">
+              <div class="empty-icon">✅</div>
+              <p>No threats detected yet</p>
+              <p class="empty-subtitle">Your child's conversations appear safe</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="section">
+          <h2>Parent Notifications</h2>
+          <div id="notifications-list" class="notifications-list">
+            <div class="empty-state">
+              <p>No notifications yet</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div id="settings-tab" class="tab-content">
+        <div class="section">
+          <h2>Settings</h2>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Monitoring Mode</h3>
+              <p>Choose how threats are handled</p>
+              <ul style="font-size: 12px; margin-top: 8px; color: #666;">
+                <li><strong>Active:</strong> Child sees warnings only</li>
+                <li><strong>Passive:</strong> Parent gets alerts only (silent)</li>
+                <li><strong>Both:</strong> Child sees warnings AND parent gets alerts</li>
+              </ul>
+            </div>
+            <select id="mode-select" class="setting-control">
+              <option value="active">Active Mode</option>
+              <option value="passive">Passive Mode</option>
+              <option value="both">Both Modes</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Enable Monitoring</h3>
+              <p>Turn monitoring on or off</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="enabled-toggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Parent Email</h3>
+              <p>Receive email alerts for critical threats</p>
+            </div>
+            <input
+              type="email"
+              id="parent-email-input"
+              class="setting-control"
+              placeholder="your.email@example.com"
+            />
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Resend API Key</h3>
+              <p>Required for sending email notifications. Get your API key from <a href="https://resend.com/api-keys" target="_blank" style="color: #667eea;">resend.com</a></p>
+            </div>
+            <input
+              type="password"
+              id="resend-api-key-input"
+              class="setting-control"
+              placeholder="re_xxxxxxxxxxxxxxxxxx"
+            />
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Email Notification Threshold</h3>
+              <p>Send email alerts when threat level reaches:</p>
+            </div>
+            <select id="email-threshold-select" class="setting-control">
+              <option value="5">Medium (Level 5+)</option>
+              <option value="7" selected>High (Level 7+)</option>
+              <option value="9">Critical Only (Level 9+)</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Parent Phone Number</h3>
+              <p>Receive SMS text alerts for critical threats (E.164 format: +1234567890)</p>
+            </div>
+            <input
+              type="tel"
+              id="parent-phone-input"
+              class="setting-control"
+              placeholder="+1234567890"
+            />
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Vonage API Key</h3>
+              <p>Required for SMS notifications. Get from <a href="https://dashboard.nexmo.com/settings" target="_blank" style="color: #667eea;">Vonage Dashboard</a></p>
+            </div>
+            <input
+              type="password"
+              id="vonage-api-key-input"
+              class="setting-control"
+              placeholder="xxxxxxxx"
+            />
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Vonage API Secret</h3>
+              <p>Your Vonage API secret key</p>
+            </div>
+            <input
+              type="password"
+              id="vonage-api-secret-input"
+              class="setting-control"
+              placeholder="xxxxxxxxxxxxxxxx"
+            />
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Vonage SMS Sender Number</h3>
+              <p>Your purchased Vonage virtual number for sending SMS (e.g., 13036320365). Required for US/Canada numbers. Get one from <a href="https://dashboard.nexmo.com/buy-numbers" target="_blank" style="color: #667eea;">Vonage Numbers</a></p>
+            </div>
+            <input
+              type="text"
+              id="vonage-sender-number-input"
+              class="setting-control"
+              placeholder="13036320365"
+            />
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>SMS Notification Threshold</h3>
+              <p>Send SMS alerts when threat level reaches:</p>
+            </div>
+            <select id="sms-threshold-select" class="setting-control">
+              <option value="5">Medium (Level 5+)</option>
+              <option value="7" selected>High (Level 7+)</option>
+              <option value="9">Critical Only (Level 9+)</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Change Password</h3>
+              <p>Update your parent dashboard password</p>
+            </div>
+            <button id="change-password-btn" class="btn btn-secondary">Change Password</button>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Test Notifications</h3>
+              <p>Send a test email and SMS to verify your notification settings are working</p>
+            </div>
+            <button id="test-notifications-btn" class="btn btn-secondary">Send Test Notification</button>
+          </div>
+
+          <div class="setting-actions">
+            <button id="save-settings-btn" class="btn btn-primary">Save Settings</button>
+          </div>
+        </div>
+
+        <!-- Data Management -->
+        <div class="section">
+          <h2>Data Management</h2>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Export Data</h3>
+              <p>Download all threat logs and conversations</p>
+            </div>
+            <button id="export-data-btn" class="btn btn-secondary">Export Data</button>
+          </div>
+
+          <div class="setting-item danger">
+            <div class="setting-info">
+              <h3>Clear All Data</h3>
+              <p>Permanently delete all stored data</p>
+            </div>
+            <button id="clear-data-btn" class="btn btn-danger">Clear All Data</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- About Tab -->
+      <div id="about-tab" class="tab-content">
+        <div class="section">
+          <h2>About SafeGuard Kids</h2>
+
+          <p class="about-text">
+            SafeGuard Kids is an AI-powered Chrome extension designed to protect
+            children from online predators and inappropriate content.
+          </p>
+
+          <h3>Features</h3>
+          <ul class="features-list">
+            <li>🤖 AI-powered conversation analysis using Chrome's Gemini Nano</li>
+            <li>🔍 Multi-layered threat detection (toxicity, patterns, context)</li>
+            <li>👁️ Multimodal analysis (text and images)</li>
+            <li>💬 Text message monitoring - detects predatory behavior and grooming patterns</li>
+            <li>🛡️ Child protection - detects when your child is being insulted, attacked, or bullied</li>
+            <li>⚡ Real-time monitoring of social media conversations</li>
+            <li>🔔 Instant alerts for dangerous situations</li>
+            <li>📧 Email notifications to parents</li>
+            <li>🔒 Privacy-focused with local AI processing</li>
+          </ul>
+
+          <h3>AI Status</h3>
+          <div class="ai-status-container" style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+            <div class="ai-analyzer" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: white; border-radius: 8px; margin-bottom: 8px;">
+              <span class="status-icon" id="prompt-api-status" style="font-size: 20px;">⚪</span>
+              <div style="flex: 1;">
+                <strong>Chrome Prompt API (Gemini Nano)</strong>
+                <div style="font-size: 12px; color: #666;" id="prompt-api-text">Checking...</div>
+              </div>
+              <span style="font-size: 12px; color: #999;">40% weight</span>
+            </div>
+            <div class="ai-analyzer" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: white; border-radius: 8px; margin-bottom: 8px;">
+              <span class="status-icon" style="font-size: 20px;">🟢</span>
+              <div style="flex: 1;">
+                <strong>TensorFlow.js Toxicity Model</strong>
+                <div style="font-size: 12px; color: #10b981;">Active - 7 toxicity categories</div>
+              </div>
+              <span style="font-size: 12px; color: #999;">30% weight</span>
+            </div>
+            <div class="ai-analyzer" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: white; border-radius: 8px;">
+              <span class="status-icon" style="font-size: 20px;">🟢</span>
+              <div style="flex: 1;">
+                <strong>Pattern Detection Engine</strong>
+                <div style="font-size: 12px; color: #10b981;">Active - 50+ grooming patterns</div>
+              </div>
+              <span style="font-size: 12px; color: #999;">30% weight</span>
+            </div>
+            <div style="margin-top: 12px; padding: 12px; background: #fef3c7; border-radius: 8px; font-size: 12px;" id="gemini-setup-hint">
+              <strong>💡 Tip:</strong> Enable Gemini Nano for maximum protection.
+              <a href="#" id="gemini-setup-link" style="color: #667eea; text-decoration: underline;">View setup guide</a>
+            </div>
+          </div>
+
+          <h3>How It Works</h3>
+          <ol class="how-it-works-list">
+            <li><strong>Monitoring:</strong> The extension monitors text messages and conversations on Facebook, Instagram, WhatsApp, Discord, and more.</li>
+            <li><strong>Analysis:</strong> AI analyzes messages for predatory patterns, grooming behavior, inappropriate content, insults, and attacks against your child.</li>
+            <li><strong>Detection:</strong> Combines three detection methods: Chrome Prompt API, TensorFlow.js toxicity model, and pattern matching.</li>
+            <li><strong>Protection:</strong> Detects both threats TO your child (predators, groomers) and threats AGAINST your child (bullying, insults, attacks).</li>
+            <li><strong>Action:</strong> Alerts child in active mode or notifies parent in passive mode based on threat level.</li>
+          </ol>
+
+          <h3>Privacy & Security</h3>
+          <p class="about-text">
+            All AI analysis happens locally on your device using Chrome's built-in
+            Gemini Nano model. No conversation data is sent to external servers.
+          </p>
+
+          <div class="version-info">
+            <p>Version 1.0.0</p>
+            <p>Created for Google Chrome Built-in AI Challenge 2025</p>
+          </div>
+        </div>
+      </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="parent-dashboard.js"></script>
+</body>
+</html>

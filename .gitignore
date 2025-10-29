@@ -1,0 +1,12 @@
+# Parcel build artifacts
+.parcel-cache/
+background/service-worker.js
+
+# Node modules
+node_modules/
+
+# npm
+package-lock.json
+
+# OS files
+.DS_Store

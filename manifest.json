@@ -1,0 +1,116 @@
+{
+  "manifest_version": 3,
+  "name": "SafeGuard Kids - AI-Powered Parental Control",
+  "version": "1.0.0",
+  "description": "Protect children from online predators using AI-powered content analysis with Chrome's built-in AI and TensorFlow.js",
+
+  "permissions": [
+    "storage",
+    "notifications",
+    "tabs",
+    "scripting",
+    "alarms",
+    "sidePanel"
+  ],
+
+  "host_permissions": [
+    "https://www.facebook.com/*",
+    "https://www.messenger.com/*",
+    "https://www.instagram.com/*",
+    "https://web.whatsapp.com/*",
+    "https://discord.com/*",
+    "https://web.snapchat.com/*",
+    "https://twitter.com/*",
+    "https://x.com/*",
+    "https://www.tiktok.com/*",
+    "https://*/*"
+  ],
+
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.facebook.com/*",
+        "https://www.messenger.com/*",
+        "https://www.instagram.com/*",
+        "https://web.whatsapp.com/*",
+        "https://discord.com/*",
+        "https://web.snapchat.com/*",
+        "https://twitter.com/*",
+        "https://x.com/*",
+        "https://www.tiktok.com/*"
+      ],
+      "js": [
+        "content/monitor.js"
+      ],
+      "css": [
+        "content/styles.css"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "content/page-monitor.js"
+      ],
+      "run_at": "document_idle",
+      "exclude_matches": [
+        "https://www.facebook.com/*",
+        "https://www.messenger.com/*",
+        "https://www.instagram.com/*",
+        "https://web.whatsapp.com/*",
+        "https://discord.com/*",
+        "https://web.snapchat.com/*",
+        "https://twitter.com/*",
+        "https://x.com/*",
+        "https://www.tiktok.com/*"
+      ]
+    }
+  ],
+
+  "action": {
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "32": "assets/icons/icon32.png",
+      "48": "assets/icons/icon48.png",
+      "128": "assets/icons/icon128.png"
+    },
+    "default_title": "SafeGuard Kids - Parent Dashboard"
+  },
+
+  "side_panel": {
+    "default_path": "popup/parent-dashboard.html"
+  },
+
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/*",
+        "config/platforms.json",
+        "vendor/tf.min.js",
+        "vendor/toxicity.min.js",
+        "tests/demo-chat.html",
+        "tests/demo-chat.js",
+        "tests/chat-simulator.html",
+        "tests/chat-simulator.js",
+        "tests/test-porn-detection.html",
+        "tests/test-porn-detection.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+}
